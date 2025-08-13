@@ -7,6 +7,14 @@ from .permissions import IsOwner
 
 
 class HabitViewSet(ModelViewSet):
+    """
+    list: Получение списка привычек текущего пользователя
+    create: Создание новой привычки
+    retrieve: Просмотр конкретной привычки
+    update: Обновление привычки
+    partial_update: Частичное обновление
+    destroy: Удаление привычки
+    """
     serializer_class = HabitSerializer
     pagination_class = HabitPagination
     permission_classes = [IsAuthenticated, IsOwner]

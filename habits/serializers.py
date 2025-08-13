@@ -8,7 +8,9 @@ class HabitSerializer(serializers.ModelSerializer):
         model = Habit
         fields = '__all__'
         extra_kwargs = {
-            'user': {'read_only': True}
+            'user': {'read_only': True},
+            'time_to_complete': {'help_text': 'В секундах (макс. 120)'},
+            'periodicity': {'help_text': 'Периодичность в днях (1-7)'}
         }
 
     def validate(self, attrs):

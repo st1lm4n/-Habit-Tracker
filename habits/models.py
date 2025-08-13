@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from users.models import User
 
+
 class Habit(models.Model):
     user = models.ForeignKey(
         User,
@@ -26,7 +27,7 @@ class Habit(models.Model):
     related_habit = models.ForeignKey(
         'self',
         on_delete=models.SET_NULL,
-        null=True,
+        null=True,  # Разрешаем NULL значения
         blank=True,
         verbose_name="Связанная привычка"
     )
@@ -59,3 +60,23 @@ class Habit(models.Model):
 
     def __str__(self):
         return f"{self.action} в {self.time} ({self.place})"
+
+    def clean(self):
+        from django.core.exceptions import ValidationError
+
+        # Валидация 1: Нельзя указывать и связанную привычку, и вознаграждение
+        if self.related_habit and self.reward:
+            raise ValidationError("Нельзя указывать одновременно связанную привычку и вознаграждение")
+
+        # Валидация 2: Приятная привычка не может иметь вознаграждение или связанную привычку
+        if self.is_pleasant:
+            if self.related_habit or self.reward:
+                raise ValidationError("Приятная привычка не может иметь связанную привычку или вознаграждение")
+
+        # Валидация 3: Связанная привычка должна быть приятной
+        if self.related_habit and not self.related_habit.is_pleasant:
+            raise ValidationError("Связанная привычка должна быть приятной")
+
+        # Валидация 4: Нельзя ссылаться на себя
+        if self.related_habit and self.related_habit == self:
+            raise ValidationError("Нельзя ссылаться на себя как на связанную привычку")
