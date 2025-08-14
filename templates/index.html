@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 text-center mb-5">
+        <h1 class="display-4 fw-bold text-dark mb-3">Трекер Атомных Привычек</h1>
+        <p class="lead mb-4">Меняйте свою жизнь по одной привычке за раз. Основано на принципах книги Джеймса Клира "Атомные привычки".</p>
+        
+        {% if not user.is_authenticated %}
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="{% url 'signup' %}" class="btn btn-primary btn-lg px-4 gap-3">Начать сейчас</a>
+            <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-4">Войти</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center p-4">
+                <div class="bg-primary bg-gradient text-white rounded-3 p-3 d-inline-flex mb-4">
+                    <i class="fas fa-calendar-check fa-2x"></i>
+                </div>
+                <h3 class="card-title">Отслеживание</h3>
+                <p class="card-text">Регулярно отслеживайте выполнение своих привычек и наблюдайте за прогрессом.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center p-4">
+                <div class="bg-success bg-gradient text-white rounded-3 p-3 d-inline-flex mb-4">
+                    <i class="fas fa-bell fa-2x"></i>
+                </div>
+                <h3 class="card-title">Напоминания</h3>
+                <p class="card-text">Получайте уведомления в Telegram о времени выполнения привычек.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center p-4">
+                <div class="bg-info bg-gradient text-white rounded-3 p-3 d-inline-flex mb-4">
+                    <i class="fas fa-users fa-2x"></i>
+                </div>
+                <h3 class="card-title">Сообщество</h3>
+                <p class="card-text">Изучайте публичные привычки других пользователей для вдохновения.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="h5 mb-0">Как это работает?</h2>
+            </div>
+            <div class="card-body">
+                <ol class="list-group list-group-numbered">
+                    <li class="list-group-item border-0">Создайте свою привычку по формуле: "Я буду [ДЕЙСТВИЕ] в [ВРЕМЯ] в [МЕСТО]"</li>
+                    <li class="list-group-item border-0">Установите периодичность выполнения (от 1 до 7 дней)</li>
+                    <li class="list-group-item border-0">Определите вознаграждение или связанную приятную привычку</li>
+                    <li class="list-group-item border-0">Получайте напоминания и отслеживайте прогресс</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

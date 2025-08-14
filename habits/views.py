@@ -1,9 +1,11 @@
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticated
+
 from .models import Habit
-from .serializers import HabitSerializer
 from .pagination import HabitPagination
 from .permissions import IsOwner
+from .serializers import HabitSerializer
 
 
 class HabitViewSet(ModelViewSet):
@@ -26,3 +28,9 @@ class HabitViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class PublicHabitListView(ListAPIView):
+    queryset = Habit.objects.filter(is_public=True)
+    serializer_class = HabitSerializer
+    permission_classes = [AllowAny]  # Разрешить доступ без авторизации

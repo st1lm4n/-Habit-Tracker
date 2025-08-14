@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card shadow-lg border-0 rounded-lg mt-5">
+            <div class="card-header">
+                <h3 class="text-center font-weight-light my-4">
+                    <i class="fas fa-user-plus me-2"></i>Создать аккаунт
+                </h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 mb-md-0">
+                                {{ form.username }}
+                                <label for="{{ form.username.id_for_label }}">Имя пользователя</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                {{ form.email }}
+                                <label for="{{ form.email.id_for_label }}">Email</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 mb-md-0">
+                                {{ form.password1 }}
+                                <label for="{{ form.password1.id_for_label }}">Пароль</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3 mb-md-0">
+                                {{ form.password2 }}
+                                <label for="{{ form.password2.id_for_label }}">Подтвердите пароль</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                {{ form.telegram_username }}
+                                <label for="{{ form.telegram_username.id_for_label }}">Telegram username</label>
+                                <div class="form-text">Для получения уведомлений</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                {{ form.telegram_chat_id }}
+                                <label for="{{ form.telegram_chat_id.id_for_label }}">Telegram Chat ID</label>
+                                <div class="form-text">Опционально</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 mb-0">
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-block">
+                                Зарегистрироваться <i class="fas fa-check ms-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center py-3">
+                <div class="small">
+                    Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

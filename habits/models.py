@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from rest_framework.exceptions import ValidationError
+
 from users.models import User
 
 
@@ -62,8 +64,6 @@ class Habit(models.Model):
         return f"{self.action} в {self.time} ({self.place})"
 
     def clean(self):
-        from django.core.exceptions import ValidationError
-
         # Валидация 1: Нельзя указывать и связанную привычку, и вознаграждение
         if self.related_habit and self.reward:
             raise ValidationError("Нельзя указывать одновременно связанную привычку и вознаграждение")
@@ -80,3 +80,7 @@ class Habit(models.Model):
         # Валидация 4: Нельзя ссылаться на себя
         if self.related_habit and self.related_habit == self:
             raise ValidationError("Нельзя ссылаться на себя как на связанную привычку")
+
+        # Валидация 5: Периодичность 1-7 дней
+        if self.periodicity < 1 or self.periodicity > 7:
+            raise ValidationError("Периодичность должна быть от 1 до 7 дней")
