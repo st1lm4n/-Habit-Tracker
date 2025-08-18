@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ habit.action }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card habit-card mb-4">
+            <div class="card-header bg-primary text-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="h5 mb-0">{{ habit.action }}</h2>
+                    {% if habit.is_public %}
+                    <span class="badge bg-info">Публичная</span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item px-0 py-3">
+                        <i class="fas fa-map-marker-alt me-3 text-primary"></i>
+                        <strong>Место:</strong> {{ habit.place }}
+                    </li>
+                    <li class="list-group-item px-0 py-3">
+                        <i class="fas fa-clock me-3 text-primary"></i>
+                        <strong>Время:</strong> {{ habit.time }}
+                    </li>
+                    <li class="list-group-item px-0 py-3">
+                        <i class="fas fa-sync-alt me-3 text-primary"></i>
+                        <strong>Периодичность:</strong> каждые {{ habit.periodicity }} дней
+                    </li>
+                    <li class="list-group-item px-0 py-3">
+                        <i class="fas fa-stopwatch me-3 text-primary"></i>
+                        <strong>Время на выполнение:</strong> {{ habit.time_to_complete }} секунд
+                    </li>
+                    
+                    {% if habit.reward %}
+                    <li class="list-group-item px-0 py-3">
+                        <i class="fas fa-gift me-3 text-primary"></i>
+                        <strong>Вознаграждение:</strong> {{ habit.reward }}
+                    </li>
+                    {% endif %}
+                    
+                    {% if habit.related_habit %}
+                    <li class="list-group-item px-0 py-3">
+                        <i class="fas fa-link me-3 text-primary"></i>
+                        <strong>Связанная привычка:</strong> {{ habit.related_habit.action }}
+                    </li>
+                    {% endif %}
+                    
+                    <li class="list-group-item px-0 py-3">
+                        <i class="fas fa-calendar-plus me-3 text-primary"></i>
+                        <strong>Создана:</strong> {{ habit.created_at|date:"d.m.Y H:i" }}
+                    </li>
+                </ul>
+                
+                <div class="mt-4">
+                    <h5 class="border-bottom pb-2">Описание</h5>
+                    <p class="lead">Я буду <strong>{{ habit.action }}</strong> в <strong>{{ habit.time }}</strong> в <strong>{{ habit.place }}</strong></p>
+                    
+                    {% if habit.reward %}
+                    <p class="mt-3">После выполнения я вознагражу себя: <strong>{{ habit.reward }}</strong></p>
+                    {% elif habit.related_habit %}
+                    <p class="mt-3">После выполнения я выполню приятную привычку: <strong>{{ habit.related_habit.action }}</strong></p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card-footer bg-white d-flex justify-content-between">
+                <a href="{% url 'habit_list' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Назад к списку
+                </a>
+                
+                {% if habit.user == request.user %}
+                <div>
+                    <a href="{% url 'habit_update' habit.id %}" class="btn btn-outline-primary">
+                        <i class="fas fa-edit me-1"></i> Редактировать
+                    </a>
+                    <a href="{% url 'habit_delete' habit.id %}" class="btn btn-outline-danger">
+                        <i class="fas fa-trash me-1"></i> Удалить
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

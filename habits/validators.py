@@ -22,16 +22,7 @@ def validate_related_habit(value):
         raise ValidationError("В связанные привычки можно добавлять только приятные привычки")
 
 
-def validate_periodicity(value):
-    if value < 1 or value > 7:
-        raise ValidationError("Периодичность должна быть от 1 до 7 дней")
-
-
-def validate_related_habit(value):
-    if value and not value.is_pleasant:
-        raise ValidationError(
-            "Связанная привычка должна быть приятной!"
-        )
-    # Добавьте проверку на рекурсию
-    if value and value.related_habit == value:
-        raise ValidationError("Нельзя ссылаться на себя!")
+def validate_time_to_complete(value):
+    """Проверка времени выполнения (не более 120 секунд)"""
+    if value > 120:
+        raise ValidationError("Время выполнения не должно превышать 120 секунд")
