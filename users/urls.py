@@ -1,5 +1,8 @@
 from django.urls import path
-from .views import SignUpView, ProfileView, CustomLoginView, update_telegram_info
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+from .views import SignUpView, ProfileView, CustomLoginView, RegisterAPIView
+from .views import update_telegram_info
 
 app_name = 'users'
 
@@ -11,5 +14,15 @@ urlpatterns = [
     path('telegram/update/', update_telegram_info, name='update-telegram'),
 
     # API
-    path('api/register/', SignUpView.as_view(), name='api-register'),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/register/', SignUpView.as_view(), name='api_register'),
+
+    # Регистрация
+    path('register/', RegisterAPIView.as_view(), name='api_register'),
+
+    # Аутентификация JWT
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
+

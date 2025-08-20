@@ -4,7 +4,9 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
+from rest_framework import generics, status, permissions
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from .forms import CustomUserCreationForm, UserProfileForm
@@ -84,6 +86,22 @@ class ProfileView(LoginRequiredMixin, UpdateView):
             update_telegram_info(self.request, telegram_username)
 
         return super().form_valid(form)
+
+
+class RegisterAPIView(generics.CreateAPIView):
+    """API для регистрации пользователя"""
+    serializer_class = UserSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+
+        return Response({
+            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "message": "User created successfully",
+        }, status=status.HTTP_201_CREATED)
 
 
 def update_telegram_info(request, telegram_username):

@@ -1,30 +1,19 @@
 from rest_framework import serializers
 from .models import User
 from django.contrib.auth.password_validation import validate_password
+from rest_framework import serializers
+from django.contrib.auth.password_validation import validate_password
+from .models import User
+
 
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(
-        write_only=True,
-        required=True,
-        style={'input_type': 'password'},
-        validators=[validate_password]
-    )
-    password2 = serializers.CharField(
-        write_only=True,
-        style={'input_type': 'password'},
-        label="Confirm password"
-    )
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
-        fields = [
-            'id', 'username', 'email', 'password', 'password2',
-            'first_name', 'last_name', 'telegram_chat_id', 'telegram_username'
-        ]
-        extra_kwargs = {
-            'email': {'required': True},
-            'telegram_chat_id': {'required': False},
-        }
+        fields = ('username', 'password', 'password2', 'email', 'first_name', 'last_name',
+                 'telegram_username', 'telegram_chat_id')
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
