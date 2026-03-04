@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if form.instance.pk %}Редактировать привычку{% else %}Добавить привычку{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="h5 mb-0">
+                    {% if form.instance.pk %}
+                        <i class="fas fa-edit me-2"></i>Редактировать привычку
+                    {% else %}
+                        <i class="fas fa-plus me-2"></i>Добавить новую привычку
+                    {% endif %}
+                </h2>
+            </div>
+            
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                            <p class="mb-0">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Действие</label>
+                            {{ form.action }}
+                            <div class="form-text">Я буду [действие] в [время] в [месте]</div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Место</label>
+                            {{ form.place }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Время</label>
+                            {{ form.time }}
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Периодичность (дни)</label>
+                            {{ form.periodicity }}
+                            <div class="form-text">От 1 до 7 дней</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Время на выполнение (сек)</label>
+                            {{ form.time_to_complete }}
+                            <div class="form-text">Максимум 120 секунд</div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-check form-switch">
+                                {{ form.is_pleasant }}
+                                <label class="form-check-label" for="{{ form.is_pleasant.id_for_label }}">
+                                    Это приятная привычка
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check form-switch">
+                                {{ form.is_public }}
+                                <label class="form-check-label" for="{{ form.is_public.id_for_label }}">
+                                    Сделать публичной
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Связанная привычка</label>
+                            {{ form.related_habit }}
+                            <div class="form-text">Только для полезных привычек</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Вознаграждение</label>
+                            {{ form.reward }}
+                            <div class="form-text">Чем себя наградите?</div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex mt-4">
+                        <button type="submit" class="btn btn-primary me-md-2">
+                            <i class="fas fa-save me-1"></i> Сохранить
+                        </button>
+                        <a href="{% url 'habits:habit_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-times me-1"></i> Отмена
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

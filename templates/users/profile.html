@@ -1,0 +1,47 @@
+<!-- Добавьте в секцию привязки Telegram -->
+{% if user.telegram_username and not user.telegram_chat_id %}
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="card-title">Привязка Telegram</h5>
+
+        {% if user.telegram_link_code %}
+            <p>Введи этот код в боте:</p>
+            <div class="alert alert-info text-center display-6 py-3 my-3">
+                {{ user.telegram_link_code }}
+            </div>
+            <p class="small text-muted">
+                <i class="fas fa-clock me-1"></i>
+                Код действителен до: {{ user.telegram_link_code_expires|date:"H:i" }}
+            </p>
+        {% else %}
+            <p>Для получения уведомлений в Telegram:</p>
+        {% endif %}
+
+        <ol>
+            <li>Перейди в бота:
+                <a href="https://t.me/{{ TELEGRAM_BOT_USERNAME }}" target="_blank">
+                    @{{ TELEGRAM_BOT_USERNAME }}
+                </a>
+            </li>
+            <li>Отправь команду <code>/start</code></li>
+            <li>Нажми кнопку "Привязать аккаунт"</li>
+
+            {% if user.telegram_link_code %}
+                <li>Введи код: <strong>{{ user.telegram_link_code }}</strong></li>
+            {% else %}
+                <li>Сгенерируй код привязки</li>
+            {% endif %}
+        </ol>
+
+        {% if not user.telegram_link_code or not user.is_link_code_valid %}
+        <form method="post" action="{% url 'generate-telegram-code' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-sync-alt me-1"></i>
+                {% if user.telegram_link_code %}Сгенерировать новый код{% else %}Получить код{% endif %}
+            </button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
